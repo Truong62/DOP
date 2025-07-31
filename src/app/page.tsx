@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 
 type DailyDish = {
   name: string;
@@ -173,6 +174,7 @@ export default function Home() {
       </div>
 
       <PredictedDishes />
+      <Analytics />
     </div>
   );
 }
