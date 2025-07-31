@@ -1,103 +1,117 @@
 import Image from "next/image";
+import { Metadata } from "next";
+
+type DailyDish = {
+  name: string;
+  url: string;
+};
+
+function getDailyDish(): DailyDish {
+  const now = new Date();
+  const customStart = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    10
+  );
+
+  if (now < customStart) {
+    customStart.setDate(customStart.getDate() - 1);
+  }
+
+  const dayNumber = Math.floor(
+    (customStart.getTime() -
+      new Date(customStart.getFullYear(), 0, 1).getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+
+  const randomIndex = dayNumber % arr.length;
+  return arr[randomIndex];
+}
+
+const arr = [
+  {
+    name: "Bún 2 chị sinh đôi",
+    url: "https://cdn.tgdd.vn/Files/2020/04/03/1246339/cach-nau-bun-ca-ha-noi-thom-ngon-chuan-vi-khong-ta-13.jpg",
+  },
+  {
+    name: "Cơm ngon Bắc Giang",
+    url: "https://bazantravel.com/cdn/medias/uploads/85/85768-an-toi-nha-trang-oc-chao-700x394.jpg",
+  },
+  {
+    name: "Cơm sườn",
+    url: "https://inhat.vn/wp-content/uploads/2022/03/com-van-phong-bac-ninh-7-min.jpg",
+  },
+  {
+    name: "Cơm rang hoặc phở",
+    url: "https://assets.unileversolutions.com/v1/1187779.jpg",
+  },
+  {
+    name: "Bún đậu",
+    url: "https://bizweb.dktcdn.net/100/514/078/products/chuyen-de-bun-dau-man-tom-rosa-bien-hoa-dong-nai-10-1714982875768-071b3ef1-f2ab-4f58-9725-6c92fc74a290-eb47202d-864b-400b-bffb-ae095ddcfbdd.jpg?v=1716988391733",
+  },
+  {
+    name: "Cơm như ý ",
+    url: "https://afamilycdn.com/2018/10/15/ava-ngang-1-1539616620729517899602.jpg",
+  },
+  {
+    name: "bún bò huế",
+    url: "https://vnaroma.com/wp-content/uploads/2020/10/bi-quyet-chuan-bi-gia-vi-nau-bun-bo-hue-chuan-vi-01.jpg",
+  },
+];
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dailyDish = getDailyDish();
+
+  return {
+    title: `Hôm nay ăn gì? - ${dailyDish.name}`,
+    description: `Món ăn của hôm nay: ${dailyDish.name}`,
+    openGraph: {
+      title: `Hôm nay ăn gì? - ${dailyDish.name}`,
+      description: `Món ăn của hôm nay: ${dailyDish.name}`,
+      images: [
+        {
+          url: dailyDish.url.trim(),
+          width: 1200,
+          height: 630,
+          alt: dailyDish.name,
+        },
+      ],
+    },
+  };
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const dailyDish = getDailyDish();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-pink-50 py-12 px-4">
+      <h1 className="text-5xl font-extrabold text-center text-rose-600 drop-shadow mb-12">
+        HÔM NAY ĂN GÌ?
+      </h1>
+
+      <div className="bg-white rounded-3xl shadow-xl overflow-hidden max-w-3xl mx-auto">
+        <div className="relative h-72 sm:h-80 md:h-96">
+          <Image
+            src={dailyDish.url.trim()}
+            alt={dailyDish.name}
+            fill
+            className="object-cover rounded-t-3xl"
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="p-8 text-center">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
+            {dailyDish.name}
+          </h2>
+          <p className="text-gray-700 text-lg sm:text-xl mb-2">
+            Món ăn của hôm nay đã được chọn! 🍽️
+          </p>
+          <p className="text-gray-500 text-sm">
+            Món này sẽ thay đổi vào lúc 10h sáng ngày mai.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
