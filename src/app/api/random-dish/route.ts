@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { getDishForDate, setDishForDate } from "@/lib/storage";
+import {
+  getDishForDate,
+  setDishForDate,
+  initializeServerlessStorage,
+} from "@/lib/storage";
 
 type DailyDish = {
   name: string;
@@ -63,21 +67,32 @@ function generateRandomDish(seed: number): DailyDish {
 }
 
 async function getDailyDishForDate(date: Date): Promise<DailyDish> {
-  // Check if we already have a dish for this date
-  const existingDish = await getDishForDate(date);
-  if (existingDish) {
-    return existingDish;
+  try {
+    // Initialize serverless storage if needed
+    initializeServerlessStorage();
+
+    // Check if we already have a dish for this date
+    const existingDish = await getDishForDate(date);
+    if (existingDish) {
+      return existingDish;
+    }
+
+    // Generate new dish using date as seed
+    const dateString = date.toISOString().split("T")[0];
+    const seed = parseInt(dateString.replace(/-/g, ""), 10);
+    const newDish = generateRandomDish(seed);
+
+    // Save to storage
+    await setDishForDate(date, newDish);
+
+    return newDish;
+  } catch (error) {
+    console.error("Error in getDailyDishForDate:", error);
+    // Fallback to generating dish without storage
+    const dateString = date.toISOString().split("T")[0];
+    const seed = parseInt(dateString.replace(/-/g, ""), 10);
+    return generateRandomDish(seed);
   }
-
-  // Generate new dish using date as seed
-  const dateString = date.toISOString().split("T")[0];
-  const seed = parseInt(dateString.replace(/-/g, ""), 10);
-  const newDish = generateRandomDish(seed);
-
-  // Save to storage
-  await setDishForDate(date, newDish);
-
-  return newDish;
 }
 
 async function getCurrentDailyDish(): Promise<DailyDish> {
@@ -98,35 +113,66 @@ async function getCurrentDailyDish(): Promise<DailyDish> {
 }
 
 async function forceRandomToday(): Promise<DailyDish> {
-  const today = new Date();
+  try {
+    const today = new Date();
 
-  // Generate new dish using current timestamp as seed
-  const seed = Date.now();
-  const newDish = generateRandomDish(seed);
+    // Generate new dish using current timestamp as seed
+    const seed = Date.now();
+    const newDish = generateRandomDish(seed);
 
-  // Save to storage
-  await setDishForDate(today, newDish);
+    // Save to storage
+    await setDishForDate(today, newDish);
 
-  return newDish;
+    return newDish;
+  } catch (error) {
+    console.error("Error in forceRandomToday:", error);
+    // Fallback to generating dish without storage
+    const seed = Date.now();
+    return generateRandomDish(seed);
+  }
 }
 
 export async function GET() {
-  const dailyDish = await getCurrentDailyDish();
+  try {
+    const dailyDish = await getCurrentDailyDish();
 
-  return NextResponse.json({
-    success: true,
-    data: dailyDish,
-    date: new Date().toISOString().split("T")[0],
-  });
+    return NextResponse.json({
+      success: true,
+      data: dailyDish,
+      date: new Date().toISOString().split("T")[0],
+    });
+  } catch (error) {
+    console.error("Error in GET /api/random-dish:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Internal server error",
+        data: arr[0], // Fallback to first dish
+      },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST() {
-  const newDish = await forceRandomToday();
+  try {
+    const newDish = await forceRandomToday();
 
-  return NextResponse.json({
-    success: true,
-    data: newDish,
-    date: new Date().toISOString().split("T")[0],
-    message: "Đã random lại món ăn cho hôm nay",
-  });
+    return NextResponse.json({
+      success: true,
+      data: newDish,
+      date: new Date().toISOString().split("T")[0],
+      message: "Đã random lại món ăn cho hôm nay",
+    });
+  } catch (error) {
+    console.error("Error in POST /api/random-dish:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Internal server error",
+        data: arr[0], // Fallback to first dish
+      },
+      { status: 500 }
+    );
+  }
 }

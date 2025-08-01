@@ -200,9 +200,11 @@ export default function DevPage() {
                 Lưu trữ dữ liệu
               </p>
               <p className="text-sm text-gray-600">
-                ✅ Lưu vào file JSON: data/daily-dishes.json
+                ✅ Local: Lưu vào file JSON: data/daily-dishes.json
                 <br />
-                ✅ Dữ liệu được commit lên git
+                ✅ Vercel: Sử dụng in-memory storage (serverless)
+                <br />
+                ✅ Dữ liệu được commit lên git (local)
                 <br />
                 ✅ Hoạt động trên Vercel và local
                 <br />
