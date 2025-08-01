@@ -41,10 +41,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const dailyDish = await getRandomDish();
 
   return {
-    title: `Hôm nay ăn gì? - ${dailyDish.name}`,
+    title: `Hôm nay Ăn Gì? - ${dailyDish.name}`,
     description: `Món ăn của hôm nay: ${dailyDish.name}`,
     openGraph: {
-      title: `Hôm nay ăn gì? - ${dailyDish.name}`,
+      title: `Hôm nay Ăn Gì? - ${dailyDish.name}`,
       description: `Món ăn của hôm nay: ${dailyDish.name}`,
       images: [
         {
@@ -111,9 +111,16 @@ export default async function Home() {
           <p className="text-gray-700 text-lg sm:text-xl mb-2">
             Món ăn của hôm nay đã được chọn! 🍽️
           </p>
-          <p className="text-gray-500 text-sm">
-            Món này sẽ thay đổi vào lúc 10h sáng ngày mai.
+          <p className="text-gray-500 text-sm mb-4">
+            Món này sẽ thay đổi vào lúc 10h sáng ngày mai hoặc khi admin random
+            lại.
           </p>
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <p className="text-blue-700 text-sm">
+              💡 <strong>Mẹo:</strong> Món ăn có thể được cập nhật bởi admin.
+              Nếu bạn thấy món ăn thay đổi, đó là do admin đã random lại!
+            </p>
+          </div>
         </div>
       </div>
 

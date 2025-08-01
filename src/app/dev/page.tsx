@@ -33,6 +33,7 @@ export default function DevPage() {
   const [message, setMessage] = useState<string>("");
   const [storageData, setStorageData] = useState<StorageData>({});
   const [totalDates, setTotalDates] = useState<number>(0);
+  const [showHomeLink, setShowHomeLink] = useState(false);
 
   const handleGetTodayDish = async () => {
     setLoading(true);
@@ -43,6 +44,7 @@ export default function DevPage() {
         setCurrentDish(result.data);
         setCurrentDate(result.date);
         setMessage("");
+        setShowHomeLink(false);
       } else {
         console.error("Failed to fetch today's dish");
       }
@@ -64,6 +66,7 @@ export default function DevPage() {
         setCurrentDish(result.data);
         setCurrentDate(result.date);
         setMessage(result.message || "Đã random lại thành công!");
+        setShowHomeLink(true);
       } else {
         console.error("Failed to force random");
       }
@@ -122,6 +125,23 @@ export default function DevPage() {
                   <p className="text-green-600 text-sm font-semibold mb-2">
                     {message}
                   </p>
+                )}
+                {showHomeLink && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                    <p className="text-blue-800 font-semibold mb-2">
+                      🎯 Món ăn đã được cập nhật!
+                    </p>
+                    <p className="text-blue-600 text-sm mb-3">
+                      Bây giờ mọi người truy cập trang home sẽ thấy món ăn mới
+                    </p>
+                    <a
+                      href="/"
+                      target="_blank"
+                      className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                    >
+                      🔗 Xem trang home
+                    </a>
+                  </div>
                 )}
               </div>
             </>
@@ -196,6 +216,19 @@ export default function DevPage() {
               </p>
             </div>
             <div className="p-4 rounded-lg border-2 bg-blue-50 border-blue-200">
+              <p className="font-semibold text-gray-700 mb-2">Cách sử dụng</p>
+              <p className="text-sm text-gray-600">
+                ✅ Bấm "Random lại cho hôm nay" để thay đổi món ăn
+                <br />
+                ✅ Mọi người truy cập trang home sẽ thấy món ăn mới
+                <br />
+                ✅ Không cần refresh trang home (tự động cập nhật)
+                <br />
+                ✅ Chỉ admin mới có quyền random lại
+                <br />✅ User chỉ xem món ăn ở trang home
+              </p>
+            </div>
+            <div className="p-4 rounded-lg border-2 bg-yellow-50 border-yellow-200">
               <p className="font-semibold text-gray-700 mb-2">
                 Lưu trữ dữ liệu
               </p>
@@ -210,23 +243,6 @@ export default function DevPage() {
                 <br />
                 ✅ Mọi người thấy cùng kết quả
                 <br />✅ Có thể force random lại cho hôm nay
-              </p>
-            </div>
-            <div className="p-4 rounded-lg border-2 bg-yellow-50 border-yellow-200">
-              <p className="font-semibold text-gray-700 mb-2">
-                Response Format
-              </p>
-              <p className="text-sm text-gray-600">
-                {`{
-  "success": true,
-  "data": {
-    "name": "Tên món ăn",
-    "url": "URL hình ảnh", 
-    "weight": 3
-  },
-  "date": "2024-01-15",
-  "message": "Đã random lại món ăn cho hôm nay"
-}`}
               </p>
             </div>
           </div>
