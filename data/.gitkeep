@@ -1,0 +1,2 @@
+# This file ensures the data directory is committed to git
+# The daily-dishes.json file will be created automatically when needed 
