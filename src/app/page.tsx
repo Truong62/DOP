@@ -2,6 +2,10 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type DailyDish = {
   name: string;
   url: string;
@@ -17,6 +21,7 @@ async function getRandomDish(): Promise<DailyDish> {
       }/api/random-dish`,
       {
         cache: "no-store",
+        next: { revalidate: 0 },
       }
     );
 
@@ -115,12 +120,6 @@ export default async function Home() {
             Món này sẽ thay đổi vào lúc 10h sáng ngày mai hoặc khi admin random
             lại.
           </p>
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <p className="text-blue-700 text-sm">
-              💡 <strong>Mẹo:</strong> Món ăn có thể được cập nhật bởi admin.
-              Nếu bạn thấy món ăn thay đổi, đó là do admin đã random lại!
-            </p>
-          </div>
         </div>
       </div>
 
