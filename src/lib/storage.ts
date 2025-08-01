@@ -42,7 +42,7 @@ export async function readDailyDishes(): Promise<StorageData> {
     await ensureDataDir();
     const data = await fs.readFile(STORAGE_FILE, "utf-8");
     return JSON.parse(data);
-  } catch (error) {
+  } catch {
     console.log("Using memory storage fallback");
     return memoryStorage;
   }
@@ -58,7 +58,7 @@ export async function writeDailyDishes(data: StorageData): Promise<void> {
   try {
     await ensureDataDir();
     await fs.writeFile(STORAGE_FILE, JSON.stringify(data, null, 2));
-  } catch (error) {
+  } catch {
     console.log("Using memory storage fallback");
     memoryStorage = data;
   }

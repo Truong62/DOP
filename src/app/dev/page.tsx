@@ -218,7 +218,7 @@ export default function DevPage() {
             <div className="p-4 rounded-lg border-2 bg-blue-50 border-blue-200">
               <p className="font-semibold text-gray-700 mb-2">Cách sử dụng</p>
               <p className="text-sm text-gray-600">
-                ✅ Bấm "Random lại cho hôm nay" để thay đổi món ăn
+                ✅ Bấm &quot;Random lại cho hôm nay&quot; để thay đổi món ăn
                 <br />
                 ✅ Mọi người truy cập trang home sẽ thấy món ăn mới
                 <br />

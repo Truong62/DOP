@@ -10,7 +10,7 @@ export async function GET() {
       data: data,
       totalDates: Object.keys(data).length,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         success: false,
